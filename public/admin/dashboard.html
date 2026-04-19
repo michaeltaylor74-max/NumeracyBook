@@ -220,16 +220,20 @@
 <script>
 'use strict';
 
+// ── Auth helpers ──────────────────────────────────────────
+function getToken() { return localStorage.getItem('admin_token') || ''; }
+function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
+
 // ── Auth check ────────────────────────────────────────────
 (async () => {
-  const res  = await fetch('/admin/check');
+  const res  = await fetch('/admin/check', { headers: authHeaders() });
   const json = await res.json();
   if (!json.isAdmin) window.location.href = '/admin/login.html';
 })();
 
 // ── Logout ────────────────────────────────────────────────
 document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await fetch('/admin/logout', { method: 'POST' });
+  localStorage.removeItem('admin_token');
   window.location.href = '/admin/login.html';
 });
 
@@ -248,7 +252,7 @@ function badgeHTML(status) {
 
 // ── Load data ─────────────────────────────────────────────
 async function loadDashboard() {
-  const res  = await fetch('/admin/data');
+  const res  = await fetch('/admin/data', { headers: authHeaders() });
   if (res.status === 401) { window.location.href = '/admin/login.html'; return; }
   const d    = await res.json();
 
@@ -366,7 +370,7 @@ async function saveError(id) {
   try {
     await fetch(`/admin/errors/${id}`, {
       method:  'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders(),
       body:    JSON.stringify({ status, admin_notes: notes }),
     });
     btn.textContent = 'Saved ✓'; btn.classList.add('saved');

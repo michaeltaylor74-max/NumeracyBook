@@ -1,0 +1,49 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+  command = "npm install"
+
+[[redirects]]
+  from = "/api/visit"
+  to = "/.netlify/functions/visit"
+  status = 200
+
+[[redirects]]
+  from = "/api/error-report"
+  to = "/.netlify/functions/error-report"
+  status = 200
+
+[[redirects]]
+  from = "/api/feedback"
+  to = "/.netlify/functions/feedback"
+  status = 200
+
+[[redirects]]
+  from = "/download/*"
+  to = "/.netlify/functions/download"
+  status = 200
+
+[[redirects]]
+  from = "/admin/login"
+  to = "/.netlify/functions/admin-login"
+  status = 200
+
+[[redirects]]
+  from = "/admin/logout"
+  to = "/.netlify/functions/admin-logout"
+  status = 200
+
+[[redirects]]
+  from = "/admin/check"
+  to = "/.netlify/functions/admin-check"
+  status = 200
+
+[[redirects]]
+  from = "/admin/data"
+  to = "/.netlify/functions/admin-data"
+  status = 200
+
+[[redirects]]
+  from = "/admin/errors/*"
+  to = "/.netlify/functions/admin-errors"
+  status = 200

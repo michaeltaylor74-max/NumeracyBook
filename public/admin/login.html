@@ -85,6 +85,7 @@
         });
         const json = await res.json();
         if (json.ok) {
+          localStorage.setItem('admin_token', json.token);
           window.location.href = '/admin/dashboard.html';
         } else {
           errMsg.textContent   = json.error || 'Invalid credentials.';
