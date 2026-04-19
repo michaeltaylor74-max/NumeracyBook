@@ -226,7 +226,7 @@ function authHeaders() { return { 'Content-Type': 'application/json', 'Authoriza
 
 // ── Auth check ────────────────────────────────────────────
 (async () => {
-  const res  = await fetch('/admin/check', { headers: authHeaders() });
+  const res  = await fetch('/.netlify/functions/admin-check', { headers: authHeaders() });
   const json = await res.json();
   if (!json.isAdmin) window.location.href = '/admin/login.html';
 })();
@@ -252,7 +252,7 @@ function badgeHTML(status) {
 
 // ── Load data ─────────────────────────────────────────────
 async function loadDashboard() {
-  const res  = await fetch('/admin/data', { headers: authHeaders() });
+  const res  = await fetch('/.netlify/functions/admin-data', { headers: authHeaders() });
   if (res.status === 401) { window.location.href = '/admin/login.html'; return; }
   const d    = await res.json();
 
@@ -368,7 +368,7 @@ async function saveError(id) {
   const btn    = document.getElementById(`save-${id}`);
   btn.disabled = true; btn.textContent = '…';
   try {
-    await fetch(`/admin/errors/${id}`, {
+    await fetch(`/.netlify/functions/admin-errors/${id}`, {
       method:  'PATCH',
       headers: authHeaders(),
       body:    JSON.stringify({ status, admin_notes: notes }),
