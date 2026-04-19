@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — Numeracy Books</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #003d1f 0%, #005a32 100%);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .card {
+      background: #fff; border-radius: 14px; padding: 2.8rem 2.5rem;
+      width: 100%; max-width: 380px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .logo {
+      text-align: center; margin-bottom: 2rem;
+    }
+    .logo h1 { color: #005a32; font-size: 1.3rem; margin-bottom: 0.2rem; }
+    .logo p  { color: #777; font-size: 0.85rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.2rem; }
+    label { font-weight: 600; font-size: 0.9rem; color: #1a2e1a; }
+    input {
+      border: 1.5px solid #d0e4d8; border-radius: 8px;
+      padding: 0.7rem 1rem; font-size: 0.95rem; width: 100%;
+      transition: border-color 0.2s;
+    }
+    input:focus { outline: none; border-color: #005a32; box-shadow: 0 0 0 3px rgba(0,90,50,0.1); }
+    .btn {
+      width: 100%; padding: 0.8rem; border: none; border-radius: 8px;
+      background: #005a32; color: #fff; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .btn:hover { background: #006e3d; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .error-msg {
+      background: #ffeaea; color: #900; border-radius: 7px;
+      padding: 0.7rem 1rem; font-size: 0.88rem; margin-bottom: 1rem; display: none;
+    }
+    .back { text-align: center; margin-top: 1.5rem; font-size: 0.85rem; }
+    .back a { color: #005a32; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <h1>Admin Login</h1>
+      <p>Senior Numeracy Short Course</p>
+    </div>
+    <div class="error-msg" id="errMsg"></div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" autocomplete="username" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="btn" id="loginBtn">Log In</button>
+    </form>
+    <div class="back"><a href="/">← Back to site</a></div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn    = document.getElementById('loginBtn');
+      const errMsg = document.getElementById('errMsg');
+      btn.disabled = true; btn.textContent = 'Logging in…';
+      errMsg.style.display = 'none';
+      try {
+        const res  = await fetch('/admin/login', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+          }),
+        });
+        const json = await res.json();
+        if (json.ok) {
+          window.location.href = '/admin/dashboard.html';
+        } else {
+          errMsg.textContent   = json.error || 'Invalid credentials.';
+          errMsg.style.display = 'block';
+        }
+      } catch {
+        errMsg.textContent   = 'Connection error. Please try again.';
+        errMsg.style.display = 'block';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Log In';
+      }
+    });
+  </script>
+</body>
+</html>
