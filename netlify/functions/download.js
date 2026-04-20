@@ -3,8 +3,8 @@ const crypto = require('crypto');
 const { query } = require('./_db');
 
 const BOOKS = {
-  student: { label: 'Student Workbook',         url: '/PDF/Nurmeracy Student Book.pdf' },
-  teacher: { label: "Teacher's Resource Book",  url: '/PDF/Nurmeracy Teacher Book.pdf' },
+  student: { label: 'Student Workbook',         url: '/PDF/Nurmeracy%20Student%20Book.pdf' },
+  teacher: { label: "Teacher's Resource Book",  url: '/PDF/Nurmeracy%20Teacher%20Book.pdf' },
 };
 
 function hashIP(ip) {
